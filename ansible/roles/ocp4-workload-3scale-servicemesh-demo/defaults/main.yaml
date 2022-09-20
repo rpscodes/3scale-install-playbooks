@@ -1,0 +1,18 @@
+# generic
+become_override: no
+ocp_username: opentlc-mgr
+silent: false
+
+# role
+ocp4_workload_3scale_servicemesh_demo_ocs_storage_namespace: 'openshift-storage'
+ocp4_workload_3scale_servicemesh_demo_ocs_group_name: cluster-admins
+
+
+ocp4_workload_3scale_servicemesh_demo_system_storage_size: '100Mi'
+
+# 3scale oauthclient
+ocp4_workload_3scale_servicemesh_demo_oauthclient_secret: '3scaleclientsecret'
+
+# # 3scale API user_key
+ocp4_workload_3scale_servicemesh_demo_istio_user_key: '3scaleistiosecret'
+

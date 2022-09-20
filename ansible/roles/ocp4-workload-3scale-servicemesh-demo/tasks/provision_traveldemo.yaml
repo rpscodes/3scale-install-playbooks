@@ -1,0 +1,43 @@
+---
+
+- name: Evaluate {{agency_project }} namespace if not exists 
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: '{{ agency_project }}'
+    state: present
+
+- name: Evaluate {{control_project }} namespace if not exists 
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: '{{ control_project }}'
+    state: present
+
+- name: Evaluate {{portal_project }} namespace if not exists 
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: '{{ portal_project }}'
+    state: present
+
+# Wait for operators to be copied.
+- pause:
+    minutes: 1
+
+
+- name: Create Service Mesh Member Roll 
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'new-ossm-member-roll.yaml.j2') }}"
+
+
+- name: "Create the Application from template"
+  shell: |
+    oc apply -n "{{ agency_project }}" -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel_agency.yaml
+    oc apply -n "{{ portal_project }}" -f  https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel_portal.yaml
+    oc apply -n "{{ control_project }}" -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel_control.yaml
+    oc apply -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel-gateway.yaml
+    oc apply -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel-destination-rule.yaml
+    oc apply -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel-virtual-service.yaml
+

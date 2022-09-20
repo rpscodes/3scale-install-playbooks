@@ -1,0 +1,48 @@
+---
+- name: Provision Operator Snapshot
+  include_tasks: provision_snapshotoperator.yaml
+  vars:
+    snapshot_operator_project: "openshift-marketplace"
+
+- name: Provision Kiali
+  include_tasks: provision_kiali.yaml
+  vars:
+    operators_project: "openshift-marketplace"
+
+- name: Provision Jaeger
+  include_tasks: provision_jaeger.yaml
+  vars:
+    operators_project: "openshift-marketplace"
+
+- name: Provision Service Mesh
+  include_tasks: provision_ossm.yaml
+  vars:
+    ossm_project: "istio-system"    
+    operators_project: "openshift-marketplace"
+
+
+- name: Provision TravelDemo Project
+  include_tasks: provision_traveldemo.yaml
+  vars:
+    agency_project: "travel-agency"
+    portal_project: "travel-portal"
+    control_project: "travel-control"
+    ossm_project: "istio-system"
+
+
+
+
+- name: Provision OpenShift Container Storage
+  include_tasks: provision_ocs.yaml
+  vars:
+    ocs_project: "{{ ocp4_workload_3scale_servicemesh_demo_ocs_storage_namespace }}"
+    snapshot_operator_project: "openshift-marketplace"
+
+- name: Provision 3scale
+  include_tasks: provision_threescale.yaml
+  vars:
+    threescale_project: "3scale"
+    ossm_project: "istio-system"
+    ocs_project: "{{ ocp4_workload_3scale_servicemesh_demo_ocs_storage_namespace }}"    
+
+
