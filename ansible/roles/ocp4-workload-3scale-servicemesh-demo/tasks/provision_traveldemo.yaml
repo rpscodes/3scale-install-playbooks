@@ -34,10 +34,10 @@
 
 - name: "Create the Application from template"
   shell: |
-    oc apply -n "{{ agency_project }}" -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel_agency.yaml
-    oc apply -n "{{ portal_project }}" -f  https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel_portal.yaml
-    oc apply -n "{{ control_project }}" -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel_control.yaml
-    oc apply -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel-gateway.yaml
-    oc apply -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel-destination-rule.yaml
-    oc apply -f https://raw.githubusercontent.com/rpscodes/kiali-demos/test/travels/travel-virtual-service.yaml
+    oc apply -n "{{ agency_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_agency.yaml
+    oc apply -n "{{ portal_project }}" -f  https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_portal.yaml
+    oc apply -n "{{ control_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_control.yaml
+    oc apply -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel-gateway.yaml
+    oc apply -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel-destination-rule.yaml
+    oc apply -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel-virtual-service.yaml
 

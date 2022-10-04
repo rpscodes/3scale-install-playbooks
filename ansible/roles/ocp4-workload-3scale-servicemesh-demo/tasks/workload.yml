@@ -43,6 +43,13 @@
   vars:
     threescale_project: "3scale"
     ossm_project: "istio-system"
-    ocs_project: "{{ ocp4_workload_3scale_servicemesh_demo_ocs_storage_namespace }}"    
+    ocs_project: "{{ ocp4_workload_3scale_servicemesh_demo_ocs_storage_namespace }}"   
+
+- name: Provision PartnerApps Project
+  include_tasks: provision_partnerapps.yaml
+  vars:
+    green_project: "green-portal"
+    red_project: "red-portal"
+    blue_project: "blue-portal" 
 
 

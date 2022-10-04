@@ -1,0 +1,44 @@
+---
+
+- name: Evaluate {{green_project }} namespace if not exists 
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: '{{ green_project }}'
+    state: present
+
+- name: Evaluate {{red_project }} namespace if not exists 
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: '{{ red_project }}'
+    state: present
+
+- name: Evaluate {{blue_project }} namespace if not exists 
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: '{{ blue_project }}'
+    state: present
+
+# Wait for operators to be copied.
+- pause:
+    minutes: 1
+
+- name: Deploy Green
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'green_deploy.yaml.j2') }}"
+
+- name: Deploy Red
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'red_deploy.yaml.j2') }}"
+
+- name: Deploy Blue
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'blue_deploy.yaml.j2') }}"
+
+
+
