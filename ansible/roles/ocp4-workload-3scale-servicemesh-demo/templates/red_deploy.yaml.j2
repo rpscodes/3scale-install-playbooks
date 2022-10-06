@@ -33,10 +33,10 @@ spec:
               value: http://istio-ingressgateway-istio-system.{{ route_subdomain }}/travels
             - name: API_GET_DETAILS_FOR_CITY
               value: http://istio-ingressgateway-istio-system.{{ route_subdomain }}/travels
-            - name: API_USER_KEY_NAME
+            - name: USER_KEY
               value: user_key
             - name: API_USER_KEY_VALUE
-              value: 3scaleistiosecret
+              value: redsecret
           imagePullPolicy: IfNotPresent
 ---
 kind: Service

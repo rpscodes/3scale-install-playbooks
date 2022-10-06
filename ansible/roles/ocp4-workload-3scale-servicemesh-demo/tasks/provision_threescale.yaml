@@ -120,7 +120,8 @@
   include_tasks: provision_api.yaml
   vars:
     threescale_project: "3scale"
-    ossm_project: "istio-system"        
+    ossm_project: "istio-system"  
+
 
 - name: Provision 3scale OAuthClient
   k8s:

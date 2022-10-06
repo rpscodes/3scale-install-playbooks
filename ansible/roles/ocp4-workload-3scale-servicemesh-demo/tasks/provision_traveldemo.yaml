@@ -32,12 +32,15 @@
     resource_definition:  "{{ lookup('template', 'new-ossm-member-roll.yaml.j2') }}"
 
 
-- name: "Create the Application from template"
+- name: "Create the Travel Application from manifest files"
   shell: |
     oc apply -n "{{ agency_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_agency.yaml
+    oc apply -n "{{ agency_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travels-v2.yaml
     oc apply -n "{{ portal_project }}" -f  https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_portal.yaml
     oc apply -n "{{ control_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_control.yaml
     oc apply -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel-gateway.yaml
     oc apply -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel-destination-rule.yaml
-    oc apply -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel-virtual-service.yaml
+    oc apply -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel-virtual-service-internal.yaml
+    oc apply -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel-virtual-service-external.yaml
+
 

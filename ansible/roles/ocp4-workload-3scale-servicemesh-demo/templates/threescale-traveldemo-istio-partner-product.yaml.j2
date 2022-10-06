@@ -1,0 +1,29 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: Product
+metadata:
+  name: traveldemo-istio-partner-product
+  namespace: "{{ threescale_project }}"
+spec:
+  name: "Travel Demo Partner Product"
+  systemName: traveldemo-istio-partner-product
+  metrics:
+    hits:
+      description: Number of API hits
+      friendlyName: Hits
+      unit: "hit"
+  methods:
+    method01:
+      friendlyName: TravelDetailsPage
+  mappingRules:
+    - httpMethod: GET
+      pattern: "/travels"
+      increment: 1
+      metricMethodRef: hits
+  applicationPlans:
+    basicplan:
+      name: "TravelDemo Istio Partner Basic Plan"    
+  deployment:
+    apicastHosted:
+      authentication:
+        userkey:
+          authUserKey: user_key      
