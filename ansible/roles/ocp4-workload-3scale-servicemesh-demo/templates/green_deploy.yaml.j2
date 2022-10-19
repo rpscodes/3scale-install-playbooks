@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: travels-demo-ui
-          image: quay.io/redhat-servicemesh-apim-demo/travels-demo-ui:31f59a7
+          image: quay.io/redhat-servicemesh-apim-demo/travels-demo-ui:final
           ports:
             - containerPort: 8080
               protocol: TCP
@@ -30,10 +30,10 @@ spec:
             - name: WHOAMI
               value: green
             - name: API_GET_CITIES
-              value: http://istio-ingressgateway-istio-system.{{ route_subdomain }}/travels
+              value: https://traveldemo-istio-partner-product-3scale-apicast-production.{{ route_subdomain }}/travels
             - name: API_GET_DETAILS_FOR_CITY
-              value: http://istio-ingressgateway-istio-system.{{ route_subdomain }}/travels
-            - name: USER_KEY
+              value: https://traveldemo-istio-partner-product-3scale-apicast-production.{{ route_subdomain }}/travels
+            - name: API_USER_KEY_NAME
               value: user_key
             - name: API_USER_KEY_VALUE
               value: greensecret

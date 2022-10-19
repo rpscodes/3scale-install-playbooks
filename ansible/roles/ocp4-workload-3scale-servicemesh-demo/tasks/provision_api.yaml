@@ -149,13 +149,164 @@
   until: _3scale_proxy_istio_deploy_response is defined  
 
 
-# Create 3scale WASM Custom Resources & TravelDemo Istio Partner API in 3scale
-- name: Create TravelDemo Istio Partner Product
+# # Create 3scale WASM Custom Resources & TravelDemo Istio Partner API in 3scale
+# - name: Create TravelDemo Istio Partner Product
+#   k8s:
+#     state: present
+#     resource_definition: "{{ lookup('template', 'threescale-traveldemo-istio-partner-product.yaml.j2') }}"      
+
+# - name: Wait to synchronize the  Partner Product Istio CRD with 3scale
+#   k8s_info:
+#     api_version: capabilities.3scale.net/v1beta1
+#     kind: Product
+#     name: "traveldemo-istio-partner-product"
+#     namespace: "{{ threescale_project }}"
+#   register: _wait_istio_partner_product
+#   retries: 8
+#   delay: 15
+#   until:
+#   - _wait_istio_partner_product.resources is defined
+#   - _wait_istio_partner_product.resources | length | int > 0
+#   - _wait_istio_partner_product.resources[0].status is defined
+#   - _wait_istio_partner_product.resources[0].status.conditions is defined
+#   - ( _wait_istio_partner_product.resources[0].status | to_json | from_json |
+#     json_query('conditions[?type == `Synced`].status') | join ) == "True"    
+
+# - name: Extract Partner Product Id from Product CRD
+#   set_fact:
+#     _traveldemo_istio_partner_product_id: '{{_wait_istio_partner_product.resources[0].status.productId }}'
+
+
+# - name: Get TravelDemo Istio API Basic Partner Application Plan 
+#   uri:
+#     method: GET
+#     url: "{{_tenant_admin_url}}/admin/api/services/{{_traveldemo_istio_partner_product_id}}/application_plans.xml"
+#     headers:
+#       Authorization: "{{ _tenant_basic_auth_token }}"
+#     return_content: true
+#     status_code: 200
+#   register: _3scale_istio_partner_app_plan_list
+#   until: _3scale_istio_partner_app_plan_list is defined
+
+# - name: Extract TravelDemo Istio Partner Basic Application Plan ID
+#   xml:
+#     xmlstring: "{{_3scale_istio_partner_app_plan_list.content}}"
+#     xpath: //plans/plan/id
+#     content: text
+#   register: _traveldemo_istio_partner_application_plan_id_parse   
+
+# - name: Set _traveldemo_istio_partner_application_plan_id
+#   set_fact: _traveldemo_istio_partner_application_plan_id={{ _traveldemo_istio_partner_application_plan_id_parse.matches[0].id }}  
+
+# - name: Update TravelDemo Istio Partner API deployment to Istio 
+#   uri:
+#     method: PUT
+#     url: "{{_tenant_admin_url}}/admin/api/services/{{_traveldemo_istio_partner_product_id}}.xml"
+#     headers:
+#       Authorization: "{{ _tenant_basic_auth_token }}"
+#     return_content: true
+#     body_format: form-urlencoded
+#     body:
+#     - [ deployment_option, service_mesh_istio ]
+#     status_code: 200
+#   register: _3scale_istio_partner_product_update_response
+#   until: _3scale_istio_partner_product_update_response is defined
+
+# - name: Create TravelDemo Istio API Basic Partner Green Application for Developer Account 
+#   uri:
+#     method: POST
+#     url: "{{_tenant_admin_url}}/admin/api/accounts/{{_tenant_developer_id}}/applications.xml"
+#     headers:
+#       Authorization: "{{ _tenant_basic_auth_token }}"
+#     return_content: true
+#     body_format: form-urlencoded
+#     body:
+#     - [ plan_id, "{{_traveldemo_istio_partner_application_plan_id}}" ]
+#     - [ name, "Green App" ]
+#     - [ description, "Green Partner Application" ]
+#     - [ user_key, "greensecret" ]    
+#     status_code: 201, 422
+#   register: _3scale_istio_greenpartner_app_create_response
+#   until: _3scale_istio_greenpartner_app_create_response is defined
+
+# - name: Create TravelDemo Istio API Basic Partner Red Application for Developer Account 
+#   uri:
+#     method: POST
+#     url: "{{_tenant_admin_url}}/admin/api/accounts/{{_tenant_developer_id}}/applications.xml"
+#     headers:
+#       Authorization: "{{ _tenant_basic_auth_token }}"
+#     return_content: true
+#     body_format: form-urlencoded
+#     body:
+#     - [ plan_id, "{{_traveldemo_istio_partner_application_plan_id}}" ]
+#     - [ name, "Red App" ]
+#     - [ description, "Red Partner Application" ]
+#     - [ user_key, "redsecret" ]    
+#     status_code: 201, 422
+#   register: _3scale_istio_redpartner_app_create_response
+#   until: _3scale_istio_redpartner_app_create_response is defined
+
+# - name: Create TravelDemo Istio API Basic Partner Blue Application for Developer Account 
+#   uri:
+#     method: POST
+#     url: "{{_tenant_admin_url}}/admin/api/accounts/{{_tenant_developer_id}}/applications.xml"
+#     headers:
+#       Authorization: "{{ _tenant_basic_auth_token }}"
+#     return_content: true
+#     body_format: form-urlencoded
+#     body:
+#     - [ plan_id, "{{_traveldemo_istio_partner_application_plan_id}}" ]
+#     - [ name, "Blue App" ]
+#     - [ description, "Blue Partner Application" ]
+#     - [ user_key, "bluesecret" ]    
+#     status_code: 201, 422
+#   register: _3scale_istio_bluepartner_app_create_response
+#   until: _3scale_istio_bluepartner_app_create_response is defined
+
+# - name: Promote TravelDemo Istio API to Production 
+#   uri:
+#     method: POST
+#     url: "{{_tenant_admin_url}}/admin/api/services/{{_traveldemo_istio_partner_product_id}}/proxy/deploy.xml"
+#     headers:
+#       Authorization: "{{ _tenant_basic_auth_token }}"
+#     return_content: true
+#     status_code: 201
+#   register: _3scale_partner_proxy_istio_deploy_response
+#   until: _3scale_partner_proxy_istio_deploy_response is defined 
+
+
+
+# Create 3scale TravelDemo Istio Partner API in 3scale - APIcast
+- name: Create Travel API Backend
   k8s:
     state: present
-    resource_definition: "{{ lookup('template', 'threescale-traveldemo-istio-partner-product.yaml.j2') }}"      
+    resource_definition: "{{ lookup('template', 'threescale-travelapi-backend.yaml.j2') }}" 
 
-- name: Wait to synchronize the  Partner Product Istio CRD with 3scale
+
+- name: Wait to synchronize the  Backend CRD with 3scale
+  k8s_info:
+    api_version: capabilities.3scale.net/v1beta1
+    kind: Backend
+    name: "travel-api-istio-backend"
+    namespace: "{{ threescale_project }}"
+  register: _wait_backend
+  retries: 8
+  delay: 15
+  until:
+  - _wait_backend.resources is defined
+  - _wait_backend.resources | length | int > 0
+  - _wait_backend.resources[0].status is defined
+  - _wait_backend.resources[0].status.conditions is defined
+  - ( _wait_backend.resources[0].status | to_json | from_json |
+    json_query('conditions[?type == `Synced`].status') | join ) == "True"
+
+- name: Create Travel Partner API Product
+  k8s:
+    state: present
+    resource_definition: "{{ lookup('template', 'threescale-traveldemo-istio-partner-product.yaml.j2') }}"    
+
+
+- name: Wait to synchronize the  Product CRD with 3scale
   k8s_info:
     api_version: capabilities.3scale.net/v1beta1
     kind: Product
@@ -196,21 +347,18 @@
   register: _traveldemo_istio_partner_application_plan_id_parse   
 
 - name: Set _traveldemo_istio_partner_application_plan_id
-  set_fact: _traveldemo_istio_partner_application_plan_id={{ _traveldemo_istio_partner_application_plan_id_parse.matches[0].id }}  
+  set_fact: _traveldemo_istio_partner_application_plan_id={{ _traveldemo_istio_partner_application_plan_id_parse.matches[0].id }}
 
-- name: Update TravelDemo Istio Partner API deployment to Istio 
+- name: Promote TravelDemo Istio Partner API to Staging 
   uri:
-    method: PUT
-    url: "{{_tenant_admin_url}}/admin/api/services/{{_traveldemo_istio_partner_product_id}}.xml"
+    method: POST
+    url: "{{_tenant_admin_url}}/admin/api/services/{{_traveldemo_istio_partner_product_id}}/proxy/deploy.xml"
     headers:
       Authorization: "{{ _tenant_basic_auth_token }}"
     return_content: true
-    body_format: form-urlencoded
-    body:
-    - [ deployment_option, service_mesh_istio ]
-    status_code: 200
-  register: _3scale_istio_partner_product_update_response
-  until: _3scale_istio_partner_product_update_response is defined
+    status_code: 201
+  register: _3scale_proxy_deploy_response
+  until: _3scale_proxy_deploy_response is defined
 
 - name: Create TravelDemo Istio API Basic Partner Green Application for Developer Account 
   uri:
@@ -263,15 +411,26 @@
   register: _3scale_istio_bluepartner_app_create_response
   until: _3scale_istio_bluepartner_app_create_response is defined
 
-- name: Promote TravelDemo Istio API to Production 
+- name: Secret Creation for ActiveDocs
+  k8s:
+    state: present
+    resource_definition: "{{ lookup('template', 'threescale-activedoc-secret.yaml.j2') }}"
+
+- name: Deploying ActiveDocs using 3scale Operator Resource
+  k8s:
+    state: present
+    resource_definition: "{{ lookup('template', 'threescale-activedoc-deploy.yaml.j2') }}"
+
+- name: Promote Partner Product to Production
   uri:
     method: POST
-    url: "{{_tenant_admin_url}}/admin/api/services/{{_traveldemo_istio_partner_product_id}}/proxy/deploy.xml"
+    url: '{{_tenant_admin_url}}/admin/api/services/{{_traveldemo_istio_partner_product_id}}/proxy/configs/sandbox/1/promote.json'
     headers:
       Authorization: "{{ _tenant_basic_auth_token }}"
+    body_format: form-urlencoded
+    body:
+    - [ to, "production" ]
     return_content: true
     status_code: 201
-  register: _3scale_partner_proxy_istio_deploy_response
-  until: _3scale_partner_proxy_istio_deploy_response is defined 
-
-
+  register: _3scale_partner_proxy_istio_prod_deploy_response
+  until: _3scale_partner_proxy_istio_prod_deploy_response is defined

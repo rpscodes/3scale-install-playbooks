@@ -18,7 +18,7 @@ spec:
     - httpMethod: GET
       pattern: "/travels"
       increment: 1
-      metricMethodRef: hits
+      metricMethodRef: method01
   applicationPlans:
     basicplan:
       name: "TravelDemo Istio Partner Basic Plan"    
@@ -26,4 +26,7 @@ spec:
     apicastHosted:
       authentication:
         userkey:
-          authUserKey: user_key      
+          authUserKey: user_key 
+  backendUsages:
+    travel-api-istio-backend:
+      path: /     

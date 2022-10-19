@@ -1,0 +1,11 @@
+apiVersion: capabilities.3scale.net/v1beta1
+kind: ActiveDoc
+metadata:
+  name: activedoc-secret
+  namespace: 3scale
+spec:
+  name: "Travel Partner API Documentation"
+  activeDocOpenAPIRef:
+    secretRef:
+      name: myopenapi
+  productSystemName: traveldemo-istio-partner-product
