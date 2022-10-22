@@ -52,4 +52,7 @@
     red_project: "red-portal"
     blue_project: "blue-portal" 
 
+- name: Provision Service Entries
+  include_tasks: provision_serviceentries.yaml
+
 

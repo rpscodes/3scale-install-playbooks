@@ -1,0 +1,10 @@
+---
+- name: Create System Service Entry
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'ossm-systemserviceentry.yaml.j2') }}"
+
+- name: Create Backend Service Entry
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'ossm-backendserviceentry.yaml.j2') }}"

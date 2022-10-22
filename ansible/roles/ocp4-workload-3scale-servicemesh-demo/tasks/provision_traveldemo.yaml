@@ -34,8 +34,8 @@
 
 - name: "Create the Travel Application from manifest files"
   shell: |
-    oc apply -n "{{ agency_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_agency.yaml
-    oc apply -n "{{ portal_project }}" -f  https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_portal.yaml
-    oc apply -n "{{ control_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/master/travels/travel_control.yaml
+    oc apply -n "{{ agency_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/main/travels/travel_agency.yaml
+    oc apply -n "{{ portal_project }}" -f  https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/main/travels/travel_portal.yaml
+    oc apply -n "{{ control_project }}" -f https://raw.githubusercontent.com/redhat-servicemesh-apim-demo/demos/main/travels/travel_control.yaml
 
 
