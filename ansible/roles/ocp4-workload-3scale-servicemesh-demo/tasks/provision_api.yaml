@@ -120,7 +120,7 @@
   register: _3scale_istio_product_update_response
   until: _3scale_istio_product_update_response is defined
 
-- name: Create TravelDemo Istio API Basic Application for Developer Account 
+- name: Create Travels Application for Developer Account 
   uri:
     method: POST
     url: "{{_tenant_admin_url}}/admin/api/accounts/{{_tenant_developer_id}}/applications.xml"
@@ -130,12 +130,46 @@
     body_format: form-urlencoded
     body:
     - [ plan_id, "{{_traveldemo_istio_application_plan_id}}" ]
-    - [ name, "TravelDemo Istio Basic App" ]
-    - [ description, "TravelDemo Istio basic Application" ]
-    - [ user_key, "{{ocp4_workload_3scale_servicemesh_demo_istio_user_key}}" ]    
+    - [ name, "Travels App" ]
+    - [ description, "Travels Istio basic Application" ]
+    - [ user_key, "travelsecret" ]    
     status_code: 201, 422
-  register: _3scale_istio_app_create_response
-  until: _3scale_istio_app_create_response is defined
+  register: _3scale_istio_travels_app_create_response
+  until: _3scale_istio_travels_app_create_response is defined
+
+- name: Create Viaggi Application for Developer Account 
+  uri:
+    method: POST
+    url: "{{_tenant_admin_url}}/admin/api/accounts/{{_tenant_developer_id}}/applications.xml"
+    headers:
+      Authorization: "{{ _tenant_basic_auth_token }}"
+    return_content: true
+    body_format: form-urlencoded
+    body:
+    - [ plan_id, "{{_traveldemo_istio_application_plan_id}}" ]
+    - [ name, "Viaggi App" ]
+    - [ description, "Viaggi Istio basic Application" ]
+    - [ user_key, "viaggisecret" ]    
+    status_code: 201, 422
+  register: _3scale_istio_viaggi_app_create_response
+  until: _3scale_istio_viaggi_app_create_response is defined
+
+- name: Create Voyages Application for Developer Account 
+  uri:
+    method: POST
+    url: "{{_tenant_admin_url}}/admin/api/accounts/{{_tenant_developer_id}}/applications.xml"
+    headers:
+      Authorization: "{{ _tenant_basic_auth_token }}"
+    return_content: true
+    body_format: form-urlencoded
+    body:
+    - [ plan_id, "{{_traveldemo_istio_application_plan_id}}" ]
+    - [ name, "Voyages App" ]
+    - [ description, "Voyages Istio basic Application" ]
+    - [ user_key, "voyagessecret" ]    
+    status_code: 201, 422
+  register: _3scale_istio_voyages_app_create_response
+  until: _3scale_istio_voyages_app_create_response is defined
 
 - name: Promote TravelDemo Istio API to Production 
   uri:

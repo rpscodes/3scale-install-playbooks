@@ -30,8 +30,6 @@
     ossm_project: "istio-system"
 
 
-
-
 - name: Provision OpenShift Container Storage
   include_tasks: provision_ocs.yaml
   vars:
