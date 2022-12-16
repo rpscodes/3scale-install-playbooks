@@ -1,0 +1,21 @@
+---
+
+- name: Install 3scale Service Mesh Solution Pattern
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  run_once: true
+
+  tasks:
+    - include_role:
+        name: ../roles/install
+      when: >
+        ACTION is not defined or
+        ACTION is none or
+        ACTION|trim() == "" or
+        ACTION|trim() == "install"
+    - include_role:
+        name: ../roles/install
+      when: >
+        ACTION is defined and
+        ACTION|trim() == "uninstall"    
