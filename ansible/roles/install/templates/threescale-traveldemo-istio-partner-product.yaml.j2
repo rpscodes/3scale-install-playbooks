@@ -21,7 +21,23 @@ spec:
       metricMethodRef: method01
   applicationPlans:
     basicplan:
-      name: "TravelDemo Istio Partner Basic Plan"    
+      name: "TravelDemo Istio Partner Basic Plan"
+      pricingRules:
+        - from: 1
+          to: 10
+          pricePerUnit: "1"
+          metricMethodRef:
+            systemName: hits
+        - from: 11
+          to: 20
+          pricePerUnit: "3"
+          metricMethodRef:
+            systemName: hits
+        - from: 21
+          to: 100000
+          pricePerUnit: "10"
+          metricMethodRef:
+            systemName: hits    
   deployment:
     apicastHosted:
       authentication:
