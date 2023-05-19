@@ -1,0 +1,84 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: partner-analytics
+  namespace: partner-analytics
+  labels:
+    app: partner-analytics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: partner-analytics
+  template:
+    metadata:
+      labels:
+        app: partner-analytics
+        deploymentconfig: partner-analytics
+    spec:
+      securityContext: 
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+      containers:
+        - name: partner-analytics
+          image: quay.io/redhat-servicemesh-apim-demo/partner-analytics:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: NODE_ENV
+              value: prod
+            - name: PORT
+              value: '8080'
+            - name: API_GET_PLANS
+              value: Replace_with_API_Secret
+            - name: API_GET_STATS
+              value: Replace_with_API_Secret
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: partner-analytics
+  namespace: partner-analytics
+  labels:
+    app: partner-analytics
+spec:
+  ports:
+    - name: 8080-tcp
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: partner-analytics
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: travels-red-ui
+  namespace: partner-analytics
+spec:
+  path: /
+  to:
+    kind: Service
+    name: partner-analytics
+    weight: 100
+  port:
+    targetPort: 8080-tcp
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+---
