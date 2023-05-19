@@ -110,6 +110,7 @@
     - "green-portal"
     - "red-portal"
     - "blue-portal"
+    - "partner-analytics"
 
 # Leave this as the last task in the playbook.
 - name: Remove workload tasks complete
