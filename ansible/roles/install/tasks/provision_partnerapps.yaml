@@ -21,6 +21,14 @@
     name: '{{ blue_project }}'
     state: present
 
+- name: Evaluate {{partner_analytics }} namespace if not exists 
+  k8s:
+    api_version: v1
+    kind: Namespace
+    name: '{{ partner_analytics }}'
+    state: present
+
+
 # Wait for operators to be copied.
 - pause:
     minutes: 1
@@ -41,4 +49,7 @@
     resource_definition:  "{{ lookup('template', 'blue_deploy.yaml.j2') }}"
 
 
-
+- name: Deploy Analytics
+  k8s:
+    state: present
+    resource_definition:  "{{ lookup('template', 'partner-analytics_deploy.yaml.j2') }}"
