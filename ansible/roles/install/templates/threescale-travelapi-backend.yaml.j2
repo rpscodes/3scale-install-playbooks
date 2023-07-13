@@ -1,9 +1,0 @@
-apiVersion: capabilities.3scale.net/v1beta1
-kind: Backend
-metadata:
-  name: travel-api-istio-backend
-  namespace: {{ threescale_project }}
-spec:
-  name: "Travel API Istio Backend"
-  systemName: "travel-api-istio-backend"
-  privateBaseURL: "https://istio-ingressgateway-{{ossm_project}}.{{route_subdomain}}"
