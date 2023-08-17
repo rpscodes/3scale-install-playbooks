@@ -1,8 +1,0 @@
-- name: Retrieve additional services
-  ansible.builtin.set_fact:
-    solution_explorer_services: '{{ lookup("template", "instructions-services.json.j2") }}'
-    
-- name: Create WebApp custom resource
-  kubernetes.core.k8s:
-    state: present
-    resource_definition: "{{ lookup('template', 'instructions-webapp.yaml.j2') }}"
